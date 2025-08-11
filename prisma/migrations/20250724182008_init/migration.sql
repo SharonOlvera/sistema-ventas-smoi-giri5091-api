@@ -2,7 +2,7 @@
 CREATE TABLE `Usuario` (
     `cveUsuario` INTEGER NOT NULL AUTO_INCREMENT,
     `nombre` VARCHAR(191) NOT NULL,
-    `apellido` VARCHAR(191) NOT NULL,
+    `apellidos` VARCHAR(191) NOT NULL,
     `correo` VARCHAR(191) NOT NULL,
     `username` VARCHAR(191) NOT NULL,
     `password` VARCHAR(191) NOT NULL,

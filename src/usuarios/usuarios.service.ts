@@ -1,17 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
+import { CreateUsuarioDto } from './dto/create-usuario.dto';
 
 @Injectable()
 export class UsuariosService {
 
    constructor(private prisma: PrismaService) {}
 
-    listar() {
+     listar() {
         return this.prisma.usuario.findMany({
-            select:{
+            select: {
                 cveUsuario: true,
                 nombre: true,
-                apellido:true,
+                apellidos: true,
                 username: true,
                 fechaRegistro: true,
                 password: false
@@ -19,14 +20,13 @@ export class UsuariosService {
         });
     }
 
-    crear(usuario:any) {
-
+    crear(usuario: CreateUsuarioDto) {
         return this.prisma.usuario.create({
-            data : usuario,
-              select:{
+            data: usuario,
+            select: {
                 cveUsuario: true,
                 nombre: true,
-                apellido:true,
+                apellidos: true,
                 username: true,
                 fechaRegistro: true,
                 password: false
@@ -35,19 +35,18 @@ export class UsuariosService {
     }
 
     actualizar() {
-        return 'Actualizando de Usuarios';
+        return "Actualizando usuario";
     }
 
-   async eliminar(cveUsuario: number) {
+    async eliminar(cveUsuario: number) {
         return await this.prisma.usuario.delete({
-            where:{
+            where: {
                 cveUsuario: cveUsuario
             },
-
-            select:{
+            select: {
                 cveUsuario: true,
                 nombre: true,
-                apellido:true,
+                apellidos: true,
                 username: true,
                 fechaRegistro: true,
                 password: false

@@ -8,34 +8,36 @@ import { AuthGuard } from 'src/shared/guards/auth/auth.guard';
 @UseGuards (AuthGuard)
 export class UsuariosController {
 
-    constructor(private usuarioSvc: UsuariosService, private utilSvc: UtilsService) {}
+    constructor(private usuarioSvc: UsuariosService, 
+                private utilSvc: UtilsService) { }
 
-    @Get()
-        listar() {
-            return this.usuarioSvc.listar();
-        }
+   @Get()
+    listar(){
+        return this.usuarioSvc.listar();
+    }
 
     @Get("clave")
-        getUsuariosById(@Param('clave', ParseIntPipe) clave: number) {
-            return 'Usuario :${clave}';
-        }
+    getUsuarioById(clave: number) {
+        return `Usuario: ${ clave }`;
+    }
 
-    @Post ()
-    async crear(@Body() usuario:CreateUsuarioDto) {
+    @Post()
+    async crear(@Body() usuario: CreateUsuarioDto) {
 
+        // Encriptar contraseña
         var encrypted = await this.utilSvc.hashPassword(usuario.password);
-        usuario.password =encrypted;
+        usuario.password = encrypted;
 
         return this.usuarioSvc.crear(usuario);
     }
 
-    @Put ()
+    @Put()
     actualizar() {
         return this.usuarioSvc.actualizar();
     }
 
-    @Delete (':cveUsuario')
-    eliminar (@Param ('cveUsuario', ParseIntPipe) cveUsuario: number) {
+    @Delete(':cveUsuario')
+    eliminar(@Param('cveUsuario', ParseIntPipe) cveUsuario: number) {
         return this.usuarioSvc.eliminar(cveUsuario);
     }
 

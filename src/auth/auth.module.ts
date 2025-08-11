@@ -1,10 +1,24 @@
 import { Module } from '@nestjs/common';
+import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { PrismaService } from 'src/prisma.service';
-import { UtilsService } from 'src/shared/services/utils/utils.service';
-import {JwtService} from '@nestjs/jwt';
+import { PassportModule } from '@nestjs/passport';
+import { JwtModule } from '@nestjs/jwt';
 
+// Módulo global que exporta PrismaService (ver más abajo)
+import { PrismaModule } from '../prisma/prisma.module';
+
+// src/auth/auth.module.ts
 @Module({
-  providers: [AuthService,PrismaService,JwtService, UtilsService]
+  imports: [
+    PrismaModule,
+    PassportModule,
+    JwtModule.register({
+      secret: process.env.JWT_SECRET || 'mi-secreto',
+      signOptions: { expiresIn: '1h' }
+    }),
+  ],
+  providers: [AuthService],
+  controllers: [AuthController],
+  exports: [AuthService, JwtModule], // ← ¡aquí!
 })
 export class AuthModule {}

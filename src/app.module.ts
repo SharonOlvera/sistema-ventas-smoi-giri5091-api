@@ -1,12 +1,22 @@
+// src/app.module.ts
 import { Module } from '@nestjs/common';
-import { TareasModule } from './tareas/tareas.module';
-import { UtilsService } from './shared/services/utils/utils.service';
-import {JwtService} from '@nestjs/jwt';
-import { UsuariosModule } from './usuarios/usuarios.module';
+import { AuthModule } from './auth/auth.module';
+import { RouterModule } from '@nestjs/core';
 
 @Module({
-  imports: [TareasModule, UsuariosModule],
-  controllers: [],
-  providers: [JwtService, UtilsService],
+  imports: [
+    AuthModule,
+    RouterModule.register([
+      {
+        path: 'api',
+        children: [
+          {
+            path: 'auth',
+            module: AuthModule,
+          },
+        ],
+      },
+    ]),
+  ],
 })
 export class AppModule {}

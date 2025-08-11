@@ -1,31 +1,25 @@
 import { Injectable } from '@nestjs/common';
+import { RESPONSE_PASSTHROUGH_METADATA } from '@nestjs/common/constants';
 import {JwtService} from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { jwConstans } from 'src/constans/jwt.constans';
 
 @Injectable()
-export class UtilsService {
+export class UtilsService{
+    constructor(private jwt: JwtService) {}
 
-    constructor(private jwtSvc: JwtService) {}
-    async hashPassword(password: string): Promise<string> {
-        return await bcrypt.hash(password, 10);
+    async hashPassword(password: string): Promise<string>{
+        const salt = await bcrypt.genSalt();
+        return bcrypt.hash(password, salt);
     }
-   
-    async checkPassword(password: string, encryptedPassword: string): Promise<Boolean> {
-        return await bcrypt.compareSync (password, encryptedPassword);
-    }
+    
+    async checkPassword(
+    plain: string,
+    hash: string
+  ): Promise<boolean> {
+    return bcrypt.compare(plain, hash);
+  }
 
-    async generateJWT (payload: any): Promise<string> {
-        var jwt = await this.jwtSvc.signAsync(payload, {secret: jwConstans.secret});
-         return jwt;
-    }
-
-    async getPayload(jwt: string): Promise<any> {
-        var payload = await this.jwtSvc.verifyAsync(jwt, {secret: jwConstans.secret});
-        const {iat, exp, ...data} = payload;
-
-        return data;
-
-    }
-
+  async generateJWT(payload: any): Promise<string> {
+    return this.jwt.sign(payload);
+  }
 }
