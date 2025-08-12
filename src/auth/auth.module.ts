@@ -5,7 +5,7 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 
 // Módulo global que exporta PrismaService (ver más abajo)
-import { PrismaModule } from '../prisma/prisma.module';
+import { PrismaModule } from 'src/prisma/prisma.module';
 
 // src/auth/auth.module.ts
 @Module({
